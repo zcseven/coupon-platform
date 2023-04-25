@@ -1,0 +1,7 @@
+// api语法版本
+syntax = "v1"
+
+// import group
+import (
+	"apis/user.api"
+)

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package rpc;
+option go_package = "./rpc";
+
+message UserInfoReq{
+    int64 uid = 1;
+}
+
+message UserInfoRep {
+   int64  uid = 1;
+   string name = 2;
+}
+
+service usercenter {
+   rpc getUserInfo(UserInfoReq) returns(UserInfoRep);
+}
