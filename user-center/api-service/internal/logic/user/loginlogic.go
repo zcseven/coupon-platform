@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"coupon-platform/user-center/api-service/internal/svc"
@@ -38,18 +37,17 @@ func (l *LoginLogic) getJwtToken(secretKey string, iat, seconds, userId int64) (
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
 	// todo: add your logic here and delete this line
-	telephone, _ := strconv.Atoi(req.Telephone)
-	userInfo, err := l.svcCtx.UserModel.FindOne(l.ctx, int64(telephone))
+	userInfo, err := l.svcCtx.UserModel.FindOneByTelephone(l.ctx, req.Telephone)
 	if err != nil {
 		return nil, err
 	}
 
 	now := time.Now().Unix()
-	token, _ := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, userInfo.Id)
+	token, _ := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, userInfo.Uid)
 	//accessExpire = now + l.svcCtx.Config.Auth.AccessExpire   // 过期时间
 	//refreshAfter = now + l.svcCtx.Config.Auth.AccessExpire/2  // 告知前端什么时候刷新 token
 	return &types.LoginResp{
-		Uid:      userInfo.Id,
+		Uid:      userInfo.Uid,
 		Username: userInfo.UserName,
 		Headpic:  userInfo.HeadPic,
 		Email:    userInfo.Email,

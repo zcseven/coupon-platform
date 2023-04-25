@@ -38,6 +38,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/user/info",
 					Handler: user.GetUserInfoHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/user/integral-list",
+					Handler: user.GetUserIntegralListHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

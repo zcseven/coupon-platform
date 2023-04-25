@@ -31,7 +31,23 @@ type UserReq struct {
 }
 
 type UserResp struct {
-	Uid      int64  `json:"uid"`
-	Username string `json:"user_name"`
-	Headpic  string `json:"head_pic"`
+	Uid                 int64   `json:"uid"`
+	Username            string  `json:"user_name"`
+	Headpic             string  `json:"head_pic"`
+	IntegralNum         int64   `json:"integral_num"`         // 签到积分量
+	MembershipLevel     int64   `json:"membership_level"`     // 会员等级
+	FansNum             int64   `json:"fans_num"`             // 粉丝数量
+	WithdrawalAmount    float64 `json:"withdrawal_amount"`    // 提现金额
+	RedEnvelope         float64 `json:"red_envelope"`         // 未到位的红包金额
+	PromotionCommission float64 `json:"promotion_commission"` // 推广提成金额
+	HistoryWithdrawal   float64 `json:"history_withdrawal"`   // 历史提现金额
+}
+
+type UserRightsListReq struct {
+	Uid      int64 `json:"uid"`
+	Pg       int64 `json:"pg"`
+	PageSize int64 `json:"page_size"`
+}
+
+type UserRightsListResp struct {
 }

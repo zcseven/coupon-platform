@@ -32,20 +32,22 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.UserReq) (resp *types.UserResp
 	}
 
 	userInfo, err := l.svcCtx.UserModel.FindOne(l.ctx, req.Uid)
-	// var userInfo *UserModel.UserInfo
-	// if req.Telephone != "" {
-	// 	userInfo, err = l.svcCtx.UserModel.FindOneByTelephone(l.ctx, req.Telephone)
-	// } else {
-	// 	userInfo, err = l.svcCtx.UserModel.FindOne(l.ctx, req.Uid)
-	// }
-
 	if err != nil {
 		return nil, err
 	}
 
+	userRights, err := l.svcCtx.UserRightsModel.FindOne(l.ctx, req.Uid)
+
 	return &types.UserResp{
-		Uid:      req.Uid,
-		Username: userInfo.UserName,
-		Headpic:  userInfo.HeadPic,
+		Uid:                 req.Uid,
+		Username:            userInfo.UserName,
+		Headpic:             userInfo.HeadPic,
+		WithdrawalAmount:    userRights.WithdrawalAmount,
+		FansNum:             userRights.FansNum,
+		IntegralNum:         userRights.IntegralNum,
+		RedEnvelope:         userRights.RedEnvelope,
+		PromotionCommission: userRights.PromotionCommission,
+		HistoryWithdrawal:   userRights.HistoryWithdrawal,
+		MembershipLevel:     userRights.MembershipLevel,
 	}, nil
 }

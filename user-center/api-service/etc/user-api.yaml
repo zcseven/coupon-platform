@@ -1,6 +1,6 @@
 Name: user-api
 Host: 0.0.0.0
-Port: 8001
+Port: 8002
 DataBase:
     MysqlDns: root:Zc@123456@tcp(127.0.0.1:3306)/coupon_user?parseTime=true&loc=Local&timeout=3s
 Auth:

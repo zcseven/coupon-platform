@@ -18,16 +18,16 @@ import (
 var (
 	userInfoFieldNames          = builder.RawFieldNames(&UserInfo{})
 	userInfoRows                = strings.Join(userInfoFieldNames, ",")
-	userInfoRowsExpectAutoSet   = strings.Join(stringx.Remove(userInfoFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	userInfoRowsWithPlaceHolder = strings.Join(stringx.Remove(userInfoFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	userInfoRowsExpectAutoSet   = strings.Join(stringx.Remove(userInfoFieldNames, "`uid`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	userInfoRowsWithPlaceHolder = strings.Join(stringx.Remove(userInfoFieldNames, "`uid`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
 
 type (
 	userInfoModel interface {
 		Insert(ctx context.Context, data *UserInfo) (sql.Result, error)
-		FindOne(ctx context.Context, id int64) (*UserInfo, error)
+		FindOne(ctx context.Context, uid int64) (*UserInfo, error)
 		Update(ctx context.Context, data *UserInfo) error
-		Delete(ctx context.Context, id int64) error
+		Delete(ctx context.Context, uid int64) error
 	}
 
 	defaultUserInfoModel struct {
@@ -36,16 +36,16 @@ type (
 	}
 
 	UserInfo struct {
-		Id            int64     `db:"id"`
-		UserName      string    `db:"user_name"`      // 用户信息
-		UserTelephone string    `db:"user_telephone"` // 用户手机
-		IsActive      int64     `db:"is_active"`      // 有效性
-		CreateAt      time.Time `db:"create_at"`
-		HeadPic       string    `db:"head_pic"`    // 头像
-		Password      string    `db:"password"`    // 密码
-		Email         string    `db:"email"`       // 邮箱
-		OpenId        string    `db:"open_id"`     // 微信openid
-		InviteCode    string    `db:"invite_code"` // 邀请码
+		Uid        int64     `db:"uid"`
+		UserName   string    `db:"user_name"` // 用户信息
+		Telephone  string    `db:"telephone"` // 用户手机
+		CreateAt   time.Time `db:"create_at"`
+		HeadPic    string    `db:"head_pic"`    // 头像
+		Password   string    `db:"password"`    // 密码
+		Email      string    `db:"email"`       // 邮箱
+		OpenId     string    `db:"open_id"`     // 微信openid
+		InviteCode string    `db:"invite_code"` // 邀请码
+		IsActive   int64     `db:"is_active"`   // 有效性
 	}
 )
 
@@ -56,16 +56,16 @@ func newUserInfoModel(conn sqlx.SqlConn) *defaultUserInfoModel {
 	}
 }
 
-func (m *defaultUserInfoModel) Delete(ctx context.Context, id int64) error {
-	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
-	_, err := m.conn.ExecCtx(ctx, query, id)
+func (m *defaultUserInfoModel) Delete(ctx context.Context, uid int64) error {
+	query := fmt.Sprintf("delete from %s where `uid` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, uid)
 	return err
 }
 
-func (m *defaultUserInfoModel) FindOne(ctx context.Context, id int64) (*UserInfo, error) {
-	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userInfoRows, m.table)
+func (m *defaultUserInfoModel) FindOne(ctx context.Context, uid int64) (*UserInfo, error) {
+	query := fmt.Sprintf("select %s from %s where `uid` = ? limit 1", userInfoRows, m.table)
 	var resp UserInfo
-	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, uid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -78,13 +78,13 @@ func (m *defaultUserInfoModel) FindOne(ctx context.Context, id int64) (*UserInfo
 
 func (m *defaultUserInfoModel) Insert(ctx context.Context, data *UserInfo) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userInfoRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.UserName, data.UserTelephone, data.IsActive, data.HeadPic, data.Password, data.Email, data.OpenId, data.InviteCode)
+	ret, err := m.conn.ExecCtx(ctx, query, data.UserName, data.Telephone, data.HeadPic, data.Password, data.Email, data.OpenId, data.InviteCode, data.IsActive)
 	return ret, err
 }
 
 func (m *defaultUserInfoModel) Update(ctx context.Context, data *UserInfo) error {
-	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userInfoRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.UserName, data.UserTelephone, data.IsActive, data.HeadPic, data.Password, data.Email, data.OpenId, data.InviteCode, data.Id)
+	query := fmt.Sprintf("update %s set %s where `uid` = ?", m.table, userInfoRowsWithPlaceHolder)
+	_, err := m.conn.ExecCtx(ctx, query, data.UserName, data.Telephone, data.HeadPic, data.Password, data.Email, data.OpenId, data.InviteCode, data.IsActive, data.Uid)
 	return err
 }
 

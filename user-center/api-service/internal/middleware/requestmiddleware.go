@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"context"
-	"coupon-platform/user-center/common/util/system"
+	"coupon-platform/common/util/system"
 	"net/http"
 )
 
