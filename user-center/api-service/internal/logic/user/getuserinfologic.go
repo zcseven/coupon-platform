@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"coupon-platform/user-center/api-service/internal/svc"
@@ -26,20 +27,20 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.UserReq) (resp *types.UserResp, err error) {
 	// todo: add your logic here and delete this line
-
-	if req.Uid == 0 {
+	uid, err := l.ctx.Value("userId").(json.Number).Int64()
+	if err != nil || uid == 0 {
 		return nil, errors.New("参数错误")
 	}
 
-	userInfo, err := l.svcCtx.UserModel.FindOne(l.ctx, req.Uid)
+	userInfo, err := l.svcCtx.UserModel.FindOne(l.ctx, uid)
 	if err != nil {
 		return nil, err
 	}
 
-	userRights, err := l.svcCtx.UserRightsModel.FindOne(l.ctx, req.Uid)
+	userRights, err := l.svcCtx.UserRightsModel.FindOne(l.ctx, uid)
 
 	return &types.UserResp{
-		Uid:                 req.Uid,
+		Uid:                 userInfo.Uid,
 		Username:            userInfo.UserName,
 		Headpic:             userInfo.HeadPic,
 		WithdrawalAmount:    userRights.WithdrawalAmount,

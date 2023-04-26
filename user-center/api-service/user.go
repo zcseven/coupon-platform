@@ -6,6 +6,7 @@ import (
 
 	"coupon-platform/user-center/api-service/internal/config"
 	"coupon-platform/user-center/api-service/internal/handler"
+	"coupon-platform/user-center/api-service/internal/middleware"
 	"coupon-platform/user-center/api-service/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -22,6 +23,16 @@ func main() {
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
+
+	// //全局中间
+	// server.Use(func(next http.HandlerFunc) http.HandlerFunc {
+	// 	return func(w http.ResponseWriter, r *http.Request) {
+
+	// 		next(w, r)
+	// 	}
+	// })
+	server.Use(middleware.NewCorsMiddleware().Handle)
+	server.Use(middleware.NewRequestMiddleware().Handle)
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)

@@ -64,7 +64,7 @@ type (
 
 //无需jwt
 @server (
-    middleware: Request,Cors
+    //middleware: Request,Cors
     group:user
 )
 service user-api {
@@ -84,7 +84,7 @@ service user-api {
 //需要jwt
 @server (
     jwt : Auth
-    middleware: Request,Cors
+    middleware: AuthToken
     group:user
 )
 service user-api {

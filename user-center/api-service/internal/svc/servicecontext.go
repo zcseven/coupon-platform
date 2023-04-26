@@ -11,11 +11,12 @@ import (
 )
 
 type ServiceContext struct {
-	Config          config.Config
-	Request         rest.Middleware
-	Cors            rest.Middleware
+	Config config.Config
+	//Request rest.Middleware
+	//Cors            rest.Middleware
 	UserModel       UserModel.UserInfoModel
 	UserRightsModel UserRightsModel.UserRightsModel
+	AuthToken       rest.Middleware
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -23,8 +24,9 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 		//middleware
-		Request: middleware.NewRequestMiddleware().Handle,
-		Cors:    middleware.NewCorsMiddleware().Handle,
+		//Request: middleware.NewRequestMiddleware().Handle,
+		//Cors:    middleware.NewCorsMiddleware().Handle,
+		AuthToken: middleware.NewAuthTokenMiddleware().Handle,
 
 		//model
 		UserModel:       UserModel.NewUserInfoModel(conn),
