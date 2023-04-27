@@ -1,4 +1,13 @@
 syntax = "v1"
 import (
+	"apis/common.api"
 	"apis/user.api"
+)
+
+info(
+	title: "the api of the plateform of coupon"
+	desc: "open api"
+	author: seven
+	email: "zc_seven@icloud.com"
+	version: 1.0
 )

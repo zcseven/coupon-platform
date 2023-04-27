@@ -15,29 +15,51 @@ type (
         Telephone string `json:"telepohone"`
         Username string `json:"user_name"`
     }
-    RegisterResp{
+    
+    RegisterResult {
         Uid int64 `json:"uid"`
         Email string `json:"email"` 
+    }
+    RegisterResp{
+        Response
+        Result RegisterResult `json:"result"`
     }
     //登陆接口
     LoginReq {
         Telephone string `json:"telephone"`
         Password string `json:"password"`
     }
-    LoginResp {
+    LoginResult {
         Uid int64 `json:"uid"`
         Username string `json:"user_name"`
         Headpic  string `json:"head_pic"`
         Email    string `json:"email"`
         Token    string `json:"token"`   
     }
+    LoginResp {
+        Response
+        Result LoginResult `json:"result"`
+    }
+
+    //刷新token
+    RefreshJwtResult{
+        AccessExpire int64 `json:"access_expire"`
+        RefreshAfter int64 `json:"refresh_after"`
+        Token        string `json:"token"`
+    }
+    RefreshJwtResp {
+        Response
+        Result RefreshJwtResult `json:"result"`
+    }
+
+
 
     //获取用户个人信息
     UserReq {
-        Uid int64 `json:"uid"`
+        Uid int64 `json:"uid,optional"`
         Telephone string `json:"telephone,optional"`
     }
-    UserResp {
+    UserRespResult {
         Uid int64 `json:"uid"`
         Username string `json:"user_name"`
         Headpic  string `json:"head_pic"`
@@ -49,6 +71,11 @@ type (
 		PromotionCommission float64 `json:"promotion_commission"` // 推广提成金额
 		HistoryWithdrawal   float64 `json:"history_withdrawal"`   // 历史提现金额
     }
+    UserResp {
+        Response
+        Result UserRespResult `json:"result"`
+    } 
+
 
     //获取签到列表
     UserRightsListReq{
@@ -76,10 +103,7 @@ service user-api {
         summary: "user-register"
     )
     @handler Register
-    post /user/register(RegisterReq) returns (RegisterResp)
-    
-    
-    
+    post /user/register(RegisterReq) returns (RegisterResp)    
 }
 //需要jwt
 @server (
@@ -88,17 +112,21 @@ service user-api {
     group:user
 )
 service user-api {
+     @doc(
+        summary: "refresh jwt"
+    )
+    @handler RefreshJwt
+    get /user/refresh returns (RefreshJwtResp)
+    
     @doc "user"
     @handler GetUserInfo
-    get /user/info (UserReq) returns (UserResp)
+    get /user/info  returns (UserResp)
 
     @doc(
         summary: "签到列表"
     )
     @handler GetUserIntegralList
-    get  /user/integral-list() returns ()
-    
-    
+    get  /user/integral-list returns()   
 }
 
 

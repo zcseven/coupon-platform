@@ -2,11 +2,10 @@ package user
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
-
+	"coupon-platform/common/bases"
 	"coupon-platform/user-center/api-service/internal/svc"
 	"coupon-platform/user-center/api-service/internal/types"
+	"encoding/json"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,11 +26,11 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.UserReq) (resp *types.UserResp, err error) {
 	// todo: add your logic here and delete this line
+	resp = new(types.UserResp)
 	uid, err := l.ctx.Value("userId").(json.Number).Int64()
 	if err != nil || uid == 0 {
-		return nil, errors.New("参数错误")
+		return nil, bases.NewCodeError(1002, err.Error())
 	}
-
 	userInfo, err := l.svcCtx.UserModel.FindOne(l.ctx, uid)
 	if err != nil {
 		return nil, err
@@ -39,7 +38,7 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.UserReq) (resp *types.UserResp
 
 	userRights, err := l.svcCtx.UserRightsModel.FindOne(l.ctx, uid)
 
-	return &types.UserResp{
+	resp.Result = types.UserRespResult{
 		Uid:                 userInfo.Uid,
 		Username:            userInfo.UserName,
 		Headpic:             userInfo.HeadPic,
@@ -50,5 +49,6 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.UserReq) (resp *types.UserResp
 		PromotionCommission: userRights.PromotionCommission,
 		HistoryWithdrawal:   userRights.HistoryWithdrawal,
 		MembershipLevel:     userRights.MembershipLevel,
-	}, nil
+	}
+	return resp, nil
 }

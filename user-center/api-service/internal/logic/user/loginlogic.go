@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"coupon-platform/common/bases"
 	"coupon-platform/user-center/api-service/internal/svc"
 	"coupon-platform/user-center/api-service/internal/types"
 
@@ -36,21 +37,29 @@ func (l *LoginLogic) getJwtToken(secretKey string, iat, seconds, userId int64) (
 }
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
+	resp = new(types.LoginResp)
 	// todo: add your logic here and delete this line
+	if len(req.Telephone) != 11 {
+		return nil, bases.NewDefaultError(bases.DefaultParamMsg)
+	}
+
 	userInfo, err := l.svcCtx.UserModel.FindOneByTelephone(l.ctx, req.Telephone)
 	if err != nil {
-		return nil, err
+		return nil, bases.NewCodeError(1002, err.Error())
 	}
 
 	now := time.Now().Unix()
 	token, _ := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, userInfo.Uid)
 	//accessExpire = now + l.svcCtx.Config.Auth.AccessExpire   // 过期时间
 	//refreshAfter = now + l.svcCtx.Config.Auth.AccessExpire/2  // 告知前端什么时候刷新 token
-	return &types.LoginResp{
+
+	resp.Result = types.LoginResult{
 		Uid:      userInfo.Uid,
 		Username: userInfo.UserName,
 		Headpic:  userInfo.HeadPic,
 		Email:    userInfo.Email,
 		Token:    token,
-	}, nil
+	}
+
+	return resp, nil
 }
