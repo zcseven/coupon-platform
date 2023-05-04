@@ -80,14 +80,15 @@ type UserResp struct {
 }
 
 type UserRightsListReq struct {
-	Pg       int64 `json:"pg"`
-	PageSize int64 `json:"page_size"`
+	Pg       int64 `json:"pg,default=1"`
+	PageSize int64 `json:"page_size,default=20"`
 }
 
 type UserRightsList struct {
 	Uid          int64 `json:"uid"`
 	IntegralType int   `json:"integral_type"`
 	IngegralNum  int64 `json:"integral_num"`
+	CreateAt     int64 `json:"create_at"`
 }
 
 type UserRightsListResult struct {

@@ -79,14 +79,14 @@ type (
 
     //获取签到列表
     UserRightsListReq{
-        Pg  int64 `json:"pg"`
-        PageSize int64 `json:"page_size"`
+        Pg  int64 `json:"pg,default=1"`
+        PageSize int64 `json:"page_size,default=20"`
     }
     UserRightsList{
        Uid int64 `json:"uid"`
        IntegralType int `json:"integral_type"`
        IngegralNum  int64 `json:"integral_num"`
-       //CreateAt     time.time  `json:"create_at"`       
+       CreateAt     int64  `json:"create_at"`       
     }
     UserRightsListResult{
         PageList

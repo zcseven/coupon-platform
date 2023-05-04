@@ -46,6 +46,7 @@ func (l *GetUserIntegralListLogic) GetUserIntegralList(req *types.UserRightsList
 			Uid:          v.Uid,
 			IntegralType: int(v.IntegralType),
 			IngegralNum:  v.IntegralNum,
+			CreateAt:     v.CreateAt.Unix(),
 		})
 	}
 	resp.Result.List = result
