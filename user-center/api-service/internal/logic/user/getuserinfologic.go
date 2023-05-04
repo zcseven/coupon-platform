@@ -36,7 +36,7 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.UserReq) (resp *types.UserResp
 		return nil, err
 	}
 
-	userRights, err := l.svcCtx.UserRightsModel.FindOne(l.ctx, uid)
+	userRights, _ := l.svcCtx.UserRightsModel.FindOne(l.ctx, uid)
 
 	resp.Result = types.UserRespResult{
 		Uid:                 userInfo.Uid,
