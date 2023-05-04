@@ -13,4 +13,8 @@ type (
 		Code int `json:"code"`
 		Msg string `json:"msg"`
 	}
+    PageList {
+        Pg int `json:"pg"`
+        PageSize int `json:"page_size"`
+    }
 )

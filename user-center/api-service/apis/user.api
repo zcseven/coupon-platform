@@ -79,12 +79,22 @@ type (
 
     //获取签到列表
     UserRightsListReq{
-        Uid int64 `json:"uid"`
         Pg  int64 `json:"pg"`
         PageSize int64 `json:"page_size"`
     }
+    UserRightsList{
+       Uid int64 `json:"uid"`
+       IntegralType int `json:"integral_type"`
+       IngegralNum  int64 `json:"integral_num"`
+       //CreateAt     time.time  `json:"create_at"`       
+    }
+    UserRightsListResult{
+        PageList
+        List []*UserRightsList `json:"list"`
+    }
     UserRightsListResp{
-        
+        Response
+        Result UserRightsListResult `json:"result"`
     }
   
 )
@@ -126,7 +136,7 @@ service user-api {
         summary: "签到列表"
     )
     @handler GetUserIntegralList
-    get  /user/integral-list returns()   
+    get  /user/integral-list(UserRightsListReq) returns (UserRightsListResp)   
 }
 
 

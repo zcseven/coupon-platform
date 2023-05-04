@@ -3,6 +3,7 @@ package svc
 import (
 	"coupon-platform/user-center/api-service/internal/config"
 	"coupon-platform/user-center/api-service/internal/middleware"
+	"coupon-platform/user-center/api-service/internal/model/UserIntegralHistoryModel"
 	"coupon-platform/user-center/api-service/internal/model/UserModel"
 	"coupon-platform/user-center/api-service/internal/model/UserRightsModel"
 
@@ -14,9 +15,10 @@ type ServiceContext struct {
 	Config config.Config
 	//Request rest.Middleware
 	//Cors            rest.Middleware
-	UserModel       UserModel.UserInfoModel
-	UserRightsModel UserRightsModel.UserRightsModel
-	AuthToken       rest.Middleware
+	AuthToken          rest.Middleware
+	UserModel          UserModel.UserInfoModel
+	UserRightsModel    UserRightsModel.UserRightsModel
+	RightsHistoryModel UserIntegralHistoryModel.UserIntegralHistoryModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -29,7 +31,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		AuthToken: middleware.NewAuthTokenMiddleware().Handle,
 
 		//model
-		UserModel:       UserModel.NewUserInfoModel(conn),
-		UserRightsModel: UserRightsModel.NewUserRightsModel(conn),
+		UserModel:          UserModel.NewUserInfoModel(conn),
+		UserRightsModel:    UserRightsModel.NewUserRightsModel(conn),
+		RightsHistoryModel: UserIntegralHistoryModel.NewUserIntegralHistoryModel(conn),
 	}
 }

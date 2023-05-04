@@ -6,6 +6,11 @@ type Response struct {
 	Msg  string `json:"msg"`
 }
 
+type PageList struct {
+	Pg       int `json:"pg"`
+	PageSize int `json:"page_size"`
+}
+
 type RegisterReq struct {
 	Email     string `json:"email"`
 	Telephone string `json:"telepohone"`
@@ -75,10 +80,22 @@ type UserResp struct {
 }
 
 type UserRightsListReq struct {
-	Uid      int64 `json:"uid"`
 	Pg       int64 `json:"pg"`
 	PageSize int64 `json:"page_size"`
 }
 
+type UserRightsList struct {
+	Uid          int64 `json:"uid"`
+	IntegralType int   `json:"integral_type"`
+	IngegralNum  int64 `json:"integral_num"`
+}
+
+type UserRightsListResult struct {
+	PageList
+	List []*UserRightsList `json:"list"`
+}
+
 type UserRightsListResp struct {
+	Response
+	Result UserRightsListResult `json:"result"`
 }

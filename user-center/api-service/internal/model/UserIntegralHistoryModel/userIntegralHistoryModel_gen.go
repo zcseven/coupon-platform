@@ -19,15 +19,15 @@ var (
 	userIntegralHistoryFieldNames          = builder.RawFieldNames(&UserIntegralHistory{})
 	userIntegralHistoryRows                = strings.Join(userIntegralHistoryFieldNames, ",")
 	userIntegralHistoryRowsExpectAutoSet   = strings.Join(stringx.Remove(userIntegralHistoryFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	userIntegralHistoryRowsWithPlaceHolder = strings.Join(stringx.Remove(userIntegralHistoryFieldNames, "`uid`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	userIntegralHistoryRowsWithPlaceHolder = strings.Join(stringx.Remove(userIntegralHistoryFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
 
 type (
 	userIntegralHistoryModel interface {
 		Insert(ctx context.Context, data *UserIntegralHistory) (sql.Result, error)
-		FindOne(ctx context.Context, uid int64) (*UserIntegralHistory, error)
+		FindOne(ctx context.Context, id int64) (*UserIntegralHistory, error)
 		Update(ctx context.Context, data *UserIntegralHistory) error
-		Delete(ctx context.Context, uid int64) error
+		Delete(ctx context.Context, id int64) error
 	}
 
 	defaultUserIntegralHistoryModel struct {
@@ -36,6 +36,7 @@ type (
 	}
 
 	UserIntegralHistory struct {
+		Id           int64     `db:"id"`
 		Uid          int64     `db:"uid"`
 		IntegralType int64     `db:"integral_type"` // 积分类型:1签到;2查看帮助视频;3完成首单优惠;4召回好友;5邀请新用户
 		IntegralNum  int64     `db:"integral_num"`  // 积分量
@@ -51,16 +52,16 @@ func newUserIntegralHistoryModel(conn sqlx.SqlConn) *defaultUserIntegralHistoryM
 	}
 }
 
-func (m *defaultUserIntegralHistoryModel) Delete(ctx context.Context, uid int64) error {
-	query := fmt.Sprintf("delete from %s where `uid` = ?", m.table)
-	_, err := m.conn.ExecCtx(ctx, query, uid)
+func (m *defaultUserIntegralHistoryModel) Delete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, id)
 	return err
 }
 
-func (m *defaultUserIntegralHistoryModel) FindOne(ctx context.Context, uid int64) (*UserIntegralHistory, error) {
-	query := fmt.Sprintf("select %s from %s where `uid` = ? limit 1", userIntegralHistoryRows, m.table)
+func (m *defaultUserIntegralHistoryModel) FindOne(ctx context.Context, id int64) (*UserIntegralHistory, error) {
+	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userIntegralHistoryRows, m.table)
 	var resp UserIntegralHistory
-	err := m.conn.QueryRowCtx(ctx, &resp, query, uid)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -72,14 +73,14 @@ func (m *defaultUserIntegralHistoryModel) FindOne(ctx context.Context, uid int64
 }
 
 func (m *defaultUserIntegralHistoryModel) Insert(ctx context.Context, data *UserIntegralHistory) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, userIntegralHistoryRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Uid, data.IntegralType, data.IntegralNum, data.IsActive)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, userIntegralHistoryRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.Uid, data.IntegralType, data.IntegralNum, data.IsActive)
 	return ret, err
 }
 
 func (m *defaultUserIntegralHistoryModel) Update(ctx context.Context, data *UserIntegralHistory) error {
-	query := fmt.Sprintf("update %s set %s where `uid` = ?", m.table, userIntegralHistoryRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.IntegralType, data.IntegralNum, data.IsActive, data.Uid)
+	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userIntegralHistoryRowsWithPlaceHolder)
+	_, err := m.conn.ExecCtx(ctx, query, data.Uid, data.IntegralType, data.IntegralNum, data.IsActive, data.Id)
 	return err
 }
 
