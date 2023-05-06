@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"coupon-platform/common/bases"
+	"coupon-platform/common/util/tool"
 	"coupon-platform/user-center/api-service/internal/svc"
 	"coupon-platform/user-center/api-service/internal/types"
 
@@ -45,11 +46,14 @@ func (l *RefreshJwtLogic) RefreshJwt() (resp *types.RefreshJwtResp, err error) {
 	if err != nil || uid == 0 {
 		return nil, bases.NewCodeError(bases.DefaultCode, err.Error())
 	}
-	now := time.Now().Unix()
-	token, err := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, uid)
 	if err != nil {
 		return resp, errors.New("参数错误")
 	}
+	now := time.Now().Unix()
+	//token, err := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, uid)
+
+	token, _ := tool.GetJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, uid)
+
 	accessExpire := now + l.svcCtx.Config.Auth.AccessExpire
 	refreshAfter := now + l.svcCtx.Config.Auth.AccessExpire/2
 

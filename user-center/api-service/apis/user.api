@@ -12,13 +12,16 @@ type (
     //注册
     RegisterReq{
         Email string `json:"email"`
-        Telephone string `json:"telepohone"`
-        Username string `json:"user_name"`
+        Telephone string `json:"telephone"`
+        UserName string `json:"user_name"`
+        Password string `json:"password"`
     }
     
     RegisterResult {
         Uid int64 `json:"uid"`
+        Telephone string `json:"telephone"`
         Email string `json:"email"` 
+        Token string `json:"token"`
     }
     RegisterResp{
         Response

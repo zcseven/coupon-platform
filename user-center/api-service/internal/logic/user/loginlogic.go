@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"coupon-platform/common/bases"
+	"coupon-platform/common/util/tool"
 	"coupon-platform/user-center/api-service/internal/svc"
 	"coupon-platform/user-center/api-service/internal/types"
 
@@ -49,9 +50,10 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	}
 
 	now := time.Now().Unix()
-	token, _ := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, userInfo.Uid)
+	//token, _ := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, userInfo.Uid)
 	//accessExpire = now + l.svcCtx.Config.Auth.AccessExpire   // 过期时间
 	//refreshAfter = now + l.svcCtx.Config.Auth.AccessExpire/2  // 告知前端什么时候刷新 token
+	token, _ := tool.GetJwtToken(l.svcCtx.Config.Auth.AccessSecret, now, l.svcCtx.Config.Auth.AccessExpire, userInfo.Uid)
 
 	resp.Result = types.LoginResult{
 		Uid:      userInfo.Uid,

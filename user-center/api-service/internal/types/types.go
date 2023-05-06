@@ -13,13 +13,16 @@ type PageList struct {
 
 type RegisterReq struct {
 	Email     string `json:"email"`
-	Telephone string `json:"telepohone"`
-	Username  string `json:"user_name"`
+	Telephone string `json:"telephone"`
+	UserName  string `json:"user_name"`
+	Password  string `json:"password"`
 }
 
 type RegisterResult struct {
-	Uid   int64  `json:"uid"`
-	Email string `json:"email"`
+	Uid       int64  `json:"uid"`
+	Telephone string `json:"telephone"`
+	Email     string `json:"email"`
+	Token     string `json:"token"`
 }
 
 type RegisterResp struct {
