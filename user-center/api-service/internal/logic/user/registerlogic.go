@@ -11,7 +11,6 @@ import (
 	"coupon-platform/user-center/api-service/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 type RegisterLogic struct {
@@ -32,19 +31,20 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	// todo: add your logic here and delete this line
 	// 判断是否存在
 	userinfo, err := l.svcCtx.UserModel.FindOneByTelephone(l.ctx, req.Telephone)
-	if err != nil && err != sqlx.ErrNotFound {
+	logx.Info("日志:", err, UserModel.ErrNotFound)
+	if err != nil && err != UserModel.ErrNotFound {
 		return nil, bases.NewCodeError(1002, err.Error())
 	}
 	if userinfo.Uid > 0 {
 		return nil, bases.NewCodeError(1002, "手机号已存在")
 	}
 
-	userinfos, err := l.svcCtx.UserModel.FindOneByEmail(l.ctx, req.Email)
+	userinfo, err = l.svcCtx.UserModel.FindOneByEmail(l.ctx, req.Email)
 	if err != nil && err != UserModel.ErrNotFound {
 		return nil, bases.NewCodeError(1002, err.Error())
 	}
 
-	if userinfos.Uid > 0 {
+	if userinfo.Uid > 0 {
 		return nil, bases.NewCodeError(1002, "邮箱已存在")
 	}
 
