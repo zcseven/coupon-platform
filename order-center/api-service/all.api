@@ -1,11 +1,11 @@
 syntax = "v1"
 import (
 	"apis/common.api"
-	"apis/user.api"
+	"apis/order.api"
 )
 
 info(
-	title: "user-center"
+	title: "order-center"
 	desc: "open api"
 	author: seven
 	email: "zc_seven@icloud.com"

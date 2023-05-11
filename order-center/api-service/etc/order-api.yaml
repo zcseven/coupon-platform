@@ -1,0 +1,5 @@
+Name: order-api
+Host: 0.0.0.0
+Port: 8003
+DataBase:
+    MysqlDns: root:Zc@123456@tcp(127.0.0.1:3306)/order_center?parseTime=true&loc=Local&timeout=3s

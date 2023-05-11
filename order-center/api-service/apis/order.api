@@ -1,0 +1,77 @@
+syntax = "v1"
+
+info(
+    title: "订单信息"
+    desc: "订单中心"
+    author: "seven"
+    email: "zc_seven@icloud.com"
+    version: 1.0
+)
+
+type (
+
+    //订单请求
+    OrderListReq{
+        Pg int64 `json:"pg"`
+        PageSize int64 `json:"page_size"` 
+    }
+
+     //订单详情
+     OrderList {
+        Uid int64 `json:"uid"`
+        OrderSn string `json:"order_sn"`
+        TradeNo string `json:"trade_no"`
+        IsActive int64 `json:"is_active"`
+        CreateTime int64 `json:"create_time"`
+     }
+
+     //订单列表
+     OrderListResult {
+         PageList
+         List []*OrderListResult `json:"list"`
+     }
+
+     //订单列表响应数据
+     OrderListResp {
+        Response
+        Result  OrderListResult `json:"result"`
+     }
+
+    //订单详情请求
+     OrderInfoReq {
+        Uid int64 `json:"uid,optional"`
+        OrderSn string `json:"order_sn,optional"`
+     }
+
+     //订单详情响应
+     OrderInfoResp {
+        Uid int64 `json:"uid"`
+        OrderSn string `json:"order_sn"`
+        TradeNo string `json:"trade_no"`
+        IsActive int64 `json:"is_active"`
+        CreateTime int64 `json:"create_time"`
+     }
+)
+
+//无需jwt
+@server (
+    //middleware: Request,Cors
+    group:order
+)
+
+
+service order-api {
+   @doc(
+       summary: 订单列表
+   )
+   
+   @handler OrderList
+   post /order/list(OrderListReq) returns (OrderListResp)
+
+   @doc(
+       summary: 订单详情
+   )
+   @handler OrderInfo
+   post /order/info(OrderInfoReq) returns (OrderInfoResp)
+   
+}

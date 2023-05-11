@@ -1,7 +1,7 @@
 syntax = "v1"
 
 info(
-    title: "user-center 公共服务信息"
+    title: "order-center 公共服务信息"
     desc: "公共中心"
     author: "seven"
     email: "zc_seven@icloud.com"
