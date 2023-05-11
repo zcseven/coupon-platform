@@ -32,7 +32,7 @@ func NewUserInfoModel(conn sqlx.SqlConn) UserInfoModel {
 }
 
 func (m *customUserInfoModel) FindOneByTelephone(ctx context.Context, telephone string) (*UserInfo, error) {
-	query := fmt.Sprintf("select %s from %s where `telephone` = ? limit 1", userInfoRows, m.table)
+	query := fmt.Sprintf("select %s from %s where is_active and `telephone` = ? limit 1", userInfoRows, m.table)
 	var resp UserInfo
 	err := m.conn.QueryRowCtx(ctx, &resp, query, telephone)
 	switch err {

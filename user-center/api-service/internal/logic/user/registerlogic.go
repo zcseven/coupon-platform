@@ -29,13 +29,22 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
 	// todo: add your logic here and delete this line
+	//判断是否手机号
+	if !tool.TelephoneVerified(req.Telephone) {
+		return nil, bases.NewCodeError(1002, "手机号不正确")
+	}
+
+	//判断是否邮箱
+	if !tool.EmailVerified(req.Email) {
+		return nil, bases.NewCodeError(1002, "邮箱不正确")
+	}
+
 	// 判断是否存在
 	userinfo, err := l.svcCtx.UserModel.FindOneByTelephone(l.ctx, req.Telephone)
-	logx.Info("日志:", err, UserModel.ErrNotFound)
 	if err != nil && err != UserModel.ErrNotFound {
 		return nil, bases.NewCodeError(1002, err.Error())
 	}
-	if userinfo.Uid > 0 {
+	if err == nil && userinfo.Uid > 0 {
 		return nil, bases.NewCodeError(1002, "手机号已存在")
 	}
 
@@ -44,7 +53,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		return nil, bases.NewCodeError(1002, err.Error())
 	}
 
-	if userinfo.Uid > 0 {
+	if err == nil && userinfo.Uid > 0 {
 		return nil, bases.NewCodeError(1002, "邮箱已存在")
 	}
 
@@ -54,6 +63,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	data.Email = req.Email
 	data.Password = tool.MD5(req.Password)
 	data.UserName = req.UserName
+	data.IsActive = 1
 
 	status, err := l.svcCtx.UserModel.Insert(l.ctx, data)
 	if err != nil {
