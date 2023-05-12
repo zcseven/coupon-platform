@@ -12,8 +12,12 @@ type PageList struct {
 }
 
 type OrderListReq struct {
-	Pg       int64 `json:"pg"`
-	PageSize int64 `json:"page_size"`
+	Pg        int64  `json:"pg"`
+	PageSize  int64  `json:"page_size"`
+	Uid       int64  `json:"uid,optional"`
+	OrderSn   string `json:"order_sn,optional"`
+	StartTime int64  `json:"start_time,optional"`
+	EndTime   int64  `json:"end_time,optional"`
 }
 
 type OrderList struct {

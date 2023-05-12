@@ -14,6 +14,10 @@ type (
     OrderListReq{
         Pg int64 `json:"pg"`
         PageSize int64 `json:"page_size"` 
+        Uid int64 `json:"uid,optional"`
+        OrderSn string `json:"order_sn,optional"`
+        StartTime int64 `json:"start_time,optional"`
+        EndTime   int64 `json:"end_time,optional"`
     }
 
      //订单详情
