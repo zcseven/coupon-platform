@@ -10,6 +10,7 @@ message UserInfoReq{
 message UserInfoRep {
    int64  uid = 1;
    string name = 2;
+   string telephone = 3;
 }
 
 service usercenter {

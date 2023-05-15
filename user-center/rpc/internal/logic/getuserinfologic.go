@@ -25,6 +25,14 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 func (l *GetUserInfoLogic) GetUserInfo(in *rpc.UserInfoReq) (*rpc.UserInfoRep, error) {
 	// todo: add your logic here and delete this line
+	userinfo, err := l.svcCtx.UserModel.FindOne(l.ctx, in.Uid)
+	if err != nil {
+		return nil, err
+	}
 
-	return &rpc.UserInfoRep{}, nil
+	return &rpc.UserInfoRep{
+		Uid:       userinfo.Uid,
+		Name:      userinfo.UserName,
+		Telephone: userinfo.Telephone,
+	}, nil
 }

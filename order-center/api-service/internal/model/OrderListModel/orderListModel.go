@@ -35,6 +35,7 @@ func NewOrderListModel(conn sqlx.SqlConn) OrderListModel {
 func (m *customOrderListModel) FindList(ctx context.Context, req *types.OrderListReq) ([]*OrderList, error) {
 	var resp []*OrderList
 	query := fmt.Sprintf("select %s from %s where `uid` = ? limit %d, %d order by id desc", orderListRows, m.table, (req.Pg-1)*req.PageSize, req.PageSize)
+	
 	err := m.conn.QueryRowsCtx(ctx, &resp, query)
 
 	switch err {

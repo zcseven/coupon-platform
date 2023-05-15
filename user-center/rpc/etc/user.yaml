@@ -6,4 +6,4 @@ ListenOn: 0.0.0.0:8001
 #   Key: user.rpc
 
 DataBase:
-    mysqlDns: root:Zc@123456@tcp(127.0.0.1:3306)/taobao_goods?parseTime=true&loc=Local&timeout=3s
+    mysqlDns: root:Zc@123456@tcp(127.0.0.1:3306)/coupon_user?parseTime=true&loc=Local&timeout=3s

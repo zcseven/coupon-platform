@@ -45,6 +45,8 @@ type OrderInfoReq struct {
 
 type OrderInfoResp struct {
 	Uid        int64  `json:"uid"`
+	UserName   string `json:"user_name"`
+	Telephone  string `json:"telephone"`
 	OrderSn    string `json:"order_sn"`
 	TradeNo    string `json:"trade_no"`
 	IsActive   int64  `json:"is_active"`
