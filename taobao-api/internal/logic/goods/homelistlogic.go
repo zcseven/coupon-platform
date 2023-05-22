@@ -25,6 +25,7 @@ func NewHomeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *HomeList
 
 func (l *HomeListLogic) HomeList(req *types.GoodsReq) (resp *types.GoodsResp, err error) {
 	// todo: add your logic here and delete this line
+	//taobaoke.TopClient。
 
 	return
 }
