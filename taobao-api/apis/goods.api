@@ -1,0 +1,36 @@
+// api
+syntax = "v1"
+info(
+    author: "seven"
+    date:   "2023-04-10"
+    desc:   "商品中心信息"
+)
+
+type(
+    GoodsReq{
+        Pg int64 `json:"pg"`
+        PageSize int64 `json:"page_szie"`
+    }
+
+    GoodsResp{
+        Response
+        Result GoodsRespResult `json:"result"`
+    }
+
+    GoodsRespResult{
+        Tid int64 `json:"tid"`
+        ShopTitle string `json:"shop_name"`
+        GoodsTitle  string `json:"goods_title"`
+    }
+)
+
+// service block
+@server(
+    //jwt:   Auth
+    group: goods
+)
+service goods-api{
+    @doc "goods"
+    @handler HomeList
+    get /home(GoodsReq) returns (GoodsResp)
+}

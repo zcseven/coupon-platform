@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	user "coupon-platform/taobao-api/internal/handler/user"
+	goods "coupon-platform/taobao-api/internal/handler/goods"
 	"coupon-platform/taobao-api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -15,8 +15,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/info",
-				Handler: user.GetUserInfoHandler(serverCtx),
+				Path:    "/home",
+				Handler: goods.HomeListHandler(serverCtx),
 			},
 		},
 	)

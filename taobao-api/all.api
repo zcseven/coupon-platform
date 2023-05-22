@@ -3,5 +3,6 @@ syntax = "v1"
 
 // import group
 import (
-	"apis/user.api"
+	"apis/common.api"
+	"apis/goods.api"
 )

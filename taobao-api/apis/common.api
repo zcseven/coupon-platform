@@ -1,0 +1,20 @@
+syntax = "v1"
+
+info(
+    title: "user-center 公共服务信息"
+    desc: "公共中心"
+    author: "seven"
+    email: "zc_seven@icloud.com"
+    version: 1.0
+)
+
+type (
+	Response {
+		Code int `json:"code"`
+		Msg string `json:"msg"`
+	}
+    PageList {
+        Pg int `json:"pg"`
+        PageSize int `json:"page_size"`
+    }
+)
